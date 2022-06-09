@@ -1,0 +1,179 @@
+.table-actions {
+  text-align: right;
+
+  .btn {
+    padding: 7px 12px;
+    color: $gray-900;
+
+    i {
+      margin-right: 0;
+    }
+  }
+
+  .btn:hover {
+    background-color: $gray-100;
+    color: $secondary-color;
+  }
+}
+
+.table-responsive {
+  padding: 15px;
+
+  .table {
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+
+    thead {
+      tr {
+        th {
+          background-color: $gray-100;
+        }
+
+        th:first-child {
+          @include border-top-left-radius(.25rem);
+        }
+
+        th:last-child {
+          @include border-top-right-radius(.25rem);
+        }
+      }
+    }
+
+    th {
+      vertical-align: middle !important;
+    }
+
+    tbody {
+      tr {
+        background-color: $white;
+        @include box-shadow(0 0 15px rgba(0,0,0,.05));
+
+        .responsive-mobile-heading {
+          display: none;
+          width: 40%;
+        }
+
+        td {
+          vertical-align: middle !important;
+        }
+
+        td:first-child {
+          @include border-top-left-radius(.25rem);
+          @include border-bottom-left-radius(.25rem);
+        }
+
+        td:last-child {
+          @include border-top-right-radius(.25rem);
+          @include border-bottom-right-radius(.25rem);
+        }
+      }
+
+      tr:hover {
+        @include box-shadow(0 0 15px rgba(0,0,0,.1));
+      }
+    }
+  }
+}
+
+body.dark-theme {
+  .table-responsive {
+    background-color: $gray-900;
+    border-color: $gray-900;
+    color: $white;
+
+    .table {
+      background-color: $gray-900;
+      color: $white;
+
+      thead {
+        tr {
+          background-color: $gray-900;
+          @include box-shadow(0 0 15px rgba(0,0,0,.2));
+          th,td {
+            background-color: $gray-900;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          background-color: $gray-900;
+          @include box-shadow(0 0 15px rgba(0,0,0,.2));
+          th,td {
+            background-color: $gray-900;
+          }
+        }
+
+        tr:hover {
+          @include box-shadow(0 0 15px rgba(0,0,0,.5));
+        }
+      }
+    }
+  }
+
+  .table-actions {
+    .btn {
+      color: $white;
+    }
+
+    .btn:hover {
+      background-color: $gray-800;
+      color: $primary-color;
+    }
+  }
+}
+
+@media only screen and (max-width: 769px) {
+
+  /* Force table to not be like tables anymore */
+  .table-responsive table, .table-responsive thead, .table-responsive tbody, .table-responsive th, .table-responsive td, .table-responsive tr {
+    display: block;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  .table-responsive thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .table-responsive td {
+    /* Behave  like a "row" */
+    border: none;
+    position: relative;
+  }
+
+  .table-responsive td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  .table-actions {
+    text-align: left;
+  }
+
+  .table-responsive {
+    .table {
+      tbody {
+        tr {
+          box-shadow: none;
+          border-bottom: 1px solid $gray-200;
+
+          .responsive-mobile-heading {
+            display: inline-block;
+            width: 40%;
+            color: $gray-900;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+}

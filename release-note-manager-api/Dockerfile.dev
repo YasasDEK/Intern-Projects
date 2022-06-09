@@ -1,0 +1,8 @@
+FROM adoptopenjdk/openjdk11:alpine-slim
+
+COPY target/release-note-manager-api-executable.jar /app/
+WORKDIR /app
+
+CMD ["java", "-jar", "release-note-manager-api-executable.jar"]
+
+EXPOSE 10001

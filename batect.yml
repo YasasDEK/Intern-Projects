@@ -1,0 +1,103 @@
+project_name: release-note-manager
+
+containers:
+  build-env:
+    image: maven:3.6.1
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: .m2
+        container: /home/container-user/.m2
+        options: cached
+    working_directory: /code
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/container-user
+
+  unit-test-db:
+    build_directory: mysql
+    dockerfile: Dockerfile.unitTest
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: release_note_db_test
+
+  dev-test-db:
+    build_directory: mysql
+    dockerfile: Dockerfile.dev
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: release_note_db
+
+  db-migration-dev-test-db:
+    image: boxfuse/flyway:5.2.4
+    volumes:
+      - local: db-scripts
+        container: /flyway/sql
+    dependencies:
+      - dev-test-db
+    command: -baselineOnMigrate=true -baselineVersion=1 -url=jdbc:mysql://dev-test-db:3306/release_note_db?useSSL=false&allowPublicKeyRetrieval=true -user=user -password=password migrate
+
+  db-migration-unit-test-db:
+    image: boxfuse/flyway:5.2.4
+    volumes:
+      - local: db-scripts
+        container: /flyway/sql
+    dependencies:
+      - unit-test-db
+    command: -baselineOnMigrate=true -baselineVersion=1 -url=jdbc:mysql://unit-test-db:3306/release_note_db_test?useSSL=false&allowPublicKeyRetrieval=true -user=user -password=password migrate
+
+  docker-push-env:
+    build_directory: .batect/docker-push-env
+    volumes:
+      - local: .
+        container: /code
+        options: cached
+      - local: /var/run/docker.sock
+        container: /var/run/docker.sock
+    working_directory: /code
+
+tasks:
+  build:
+    description: Build the application.
+    run:
+      container: build-env
+      command: mvn clean install -DskipTests
+
+  buildWithJooq:
+    description: Run JOOQ code generation and then build the application.
+    run:
+      container: build-env
+      command: mvn clean install -DskipTests -Pjooq -Djooq.JDBC_URL="jdbc:mysql://dev-test-db:3306/release_note_db?useSSL=false&allowPublicKeyRetrieval=true"
+    dependencies:
+      - dev-test-db
+      - db-migration-dev-test-db
+
+  pushProjectArtifactImages:
+    description: Build and push the project artifact production image to Docker.
+    group: Publishing tasks
+    prerequisites:
+      - build
+    run:
+      container: docker-push-env
+      command: ./.batect/buildAndPushProjectArtifactImages.sh
+      environment:
+        DOCKER_REGISTRY: $DOCKER_REGISTRY
+        DOCKER_USER: $DOCKER_USER
+        DOCKER_PASSWORD: $DOCKER_PASSWORD
+
+  pushProjectInfrastructureImages:
+    description: Build and push the project dependency server components production image to Docker.
+    group: Publishing tasks
+    prerequisites:
+      - build
+    run:
+      container: docker-push-env
+      command: ./.batect/buildAndPushInfrastructureImages.sh
+#      environment:
+#        DOCKER_REGISTRY: $DOCKER_REGISTRY
+#        DOCKER_USER: $DOCKER_USER
+#        DOCKER_PASSWORD: $DOCKER_PASSWORD
+
+
+

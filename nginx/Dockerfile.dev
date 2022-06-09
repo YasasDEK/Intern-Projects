@@ -1,0 +1,11 @@
+# ================================================
+# CDN runtime environment
+# Build done in the previous step will be copied to fresh nginx container
+#
+FROM nginx:1.18.0-alpine
+
+EXPOSE 80
+
+CMD ["/bin/sh", "-c", "exec nginx -g 'daemon off;';"]
+
+WORKDIR /hms/files

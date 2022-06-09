@@ -1,0 +1,112 @@
+version: '3.7'
+
+services:
+  # apache
+  rnm_apache:
+    image: rnm/apache
+    volumes:
+      - ${APACHE_HTTPD_CONF_VOLUME}:/usr/local/apache2/conf/httpd.conf
+      - ${APACHE_MPM_CONF_VOLUME}:/usr/local/apache2/conf/extra/httpd-mpm.conf
+      - ${APACHE_SSL_CONF_VOLUME}:/usr/local/apache2/conf/extra/httpd-ssl.conf
+      - ${APACHE_LOG_VOLUME}:/hms/logs/apache
+      - ${APACHE_CERT_LOCATION}:/usr/local/apache2/conf/hms.crt
+      - ${APACHE_CERT_KEY_LOCATION}:/usr/local/apache2/conf/hms.key
+      - ${APACHE_INTERMEDIATE_CERT_LOCATION}:/usr/local/apache2/conf/ca.crt
+    environment:
+      TZ: ${SERVER_TIME_ZONE}
+    networks:
+      rnmmesh:
+        aliases:
+          - rnm-apache
+    ports:
+      - 443:443
+    restart: always
+
+  ##db
+  rnm_db:
+    image: rnm/mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ${MYSQL_DATA_VOLUME}:/var/lib/mysql
+    networks:
+      rnmmesh:
+        aliases:
+          - rnm-mysql
+    restart: always
+    ports:
+      - 33080:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: release_note_db
+      TZ: ${SERVER_TIME_ZONE}
+
+#  #keycloack
+#  rnm_keycloak:
+#    image: rnm/keycloak
+#    ports:
+#      - 9090:8080
+#    environment:
+#      PROXY_ADDRESS_FORWARDING: "true"
+#      DB_VENDOR: MYSQL
+#      DB_ADDR: rnm-mysql
+#      DB_PORT: 3306
+#      DB_DATABASE: keycloak
+#      DB_USER: user
+#      DB_PASSWORD: password
+#      KEYCLOAK_USER: admin
+#      KEYCLOAK_PASSWORD: test123#
+#      KEYCLOAK_IMPORT: /tmp/realm-export.json
+#    volumes:
+#      - ${PORTAL_KEYCLOAK_REALM_FILE_PATH}:/tmp/realm-export.json
+##      - ${PORTAL_KEYCLOAK_LOGIN_THEME_FILE_PATH}:/opt/jboss/keycloak/themes/portal-theme
+#    #      - ../init/keycloak/loginTheme:/opt/jboss/keycloak/themes/loginTheme
+#      - ${PORTAL_KEYCLOAK_LOG_PATH}:/opt/jboss/keycloak/standalone/log
+#    depends_on:
+#      - rnm_db
+#    restart: always
+#    networks:
+#      rnmmesh:
+#        aliases:
+#          - rnm-keycloak
+
+  rnm_api:
+    image: rnm/release-note-manager-api
+    env_file:
+      - db_connection.env
+      - api-server.env
+    volumes:
+      - ${RNM_API_SERVER_LOG}:/hms/logs/rnm
+      - ${PORTAL_FILE_UPLOAD_TEMP_LOCATION}:/hms/files/file-uploads
+      - ${PORTAL_FILE_UPLOAD_APP_RELATED_LOCATION}:/hms/files/file-uploads/apps
+      - ${PORTAL_FILE_APP_CONTENT_RELATED_LOCATION}:/hms/files/file-uploads/apps/app-content
+    environment:
+      PORTAL_KEYCLOAK_HOST: ${PORTAL_KEYCLOAK_HOST}
+      PORTAL_KEYCLOAK_CLIENT_SECRET: ${PORTAL_KEYCLOAK_CLIENT_SECRET}
+      TZ: ${SERVER_TIME_ZONE}
+    networks:
+      rnmmesh:
+        aliases:
+          - release-note-manager-api
+    restart: always
+    ports:
+      - 10001:10001
+    expose:
+      - "10001"
+
+  #webapp
+  rnm_webapp:
+    image: rnm/webapp
+    volumes:
+      - ${RNM_WEBAPP_LOG}:/hms/logs/nginx/
+    environment:
+      TZ: ${SERVER_TIME_ZONE}
+    restart: always
+    expose:
+      - "80"
+    networks:
+      rnmmesh:
+        aliases:
+          - rnm-webapp
+
+networks:
+  rnmmesh: {}

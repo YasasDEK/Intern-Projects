@@ -1,0 +1,110 @@
+.modal-body {
+  background-color: $gray-100;
+
+  .modal__qr-code {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.modal-header .close {
+  padding: .5rem .7rem;
+  background-color: $gray-200;
+  margin: -1rem -1rem -1rem auto;
+  @include border-radius(0 3px 3px 3px);
+  font-weight: normal;
+}
+
+.modal__checkbox-list li {
+  display: inline-block;
+  margin-right: 15px;
+}
+
+.modal-footer {
+  .btn {
+    min-width: 5rem;
+  }
+}
+
+//Modal left right
+.modal.left .modal-dialog,
+.modal.right .modal-dialog {
+  position: fixed;
+  margin: auto;
+  width: 420px;
+  height: 100%;
+  -webkit-transform: translate3d(0%, 0, 0);
+  -ms-transform: translate3d(0%, 0, 0);
+  -o-transform: translate3d(0%, 0, 0);
+  transform: translate3d(0%, 0, 0);
+}
+
+.modal.left .modal-content,
+.modal.right .modal-content {
+  height: 100%;
+  overflow-y: auto;
+  @include border-radius(0);
+  border: 0;
+}
+
+.modal.left .modal-body,
+.modal.right .modal-body {
+  padding: 15px 15px 80px;
+}
+
+/*Left*/
+.modal.left.fade .modal-dialog {
+  left: -420px;
+  -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+  transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+
+.modal.left.fade.show .modal-dialog {
+  left: 0;
+}
+
+/*Right*/
+.modal.right.fade .modal-dialog {
+  right: -420px;
+  -webkit-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -moz-transition: opacity 0.3s linear, right 0.3s ease-out;
+  -o-transition: opacity 0.3s linear, right 0.3s ease-out;
+  transition: opacity 0.3s linear, right 0.3s ease-out;
+}
+
+.modal.right.fade.show .modal-dialog {
+  right: 0;
+}
+
+body.dark-theme {
+  .modal-content {
+    background-color: $gray-900;
+    border-color: $gray-900;
+    color: $white;
+
+    .modal-header {
+      border-bottom-color: $gray-900;
+    }
+    .modal-body {
+      background-color: $gray-900;
+      color: $white;
+    }
+
+    .modal-footer {
+      border-top-color: $gray-900;
+    }
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .modal-lg, .modal-xl {
+    max-width: 900px;
+  }
+}

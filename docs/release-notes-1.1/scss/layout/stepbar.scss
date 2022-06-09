@@ -1,0 +1,147 @@
+.step-bar {
+  padding: 15px 0;
+  text-align: center;
+  background-color: $white;
+  -webkit-border-radius: 8px;
+  border-radius: 8px;
+
+  .step-bar__container {
+    display: inline-table;
+    flex-direction: row;
+    text-align: center;
+    box-sizing: border-box;
+    width: 20%;
+    position: relative;
+    margin-right: -4px;
+
+    .step-bar__step-indicator {
+      width: 24px;
+      height: 24px;
+      line-height: 22px;
+      background-color: $white;
+      -webkit-border-radius: 100px;
+      border-radius: 100px;
+      position: absolute;
+      top: -11px;
+      left: 46%;
+      z-index: 100;
+      -webkit-box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22);
+    }
+
+    .step-bar__step-indicator:before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      display: block;
+      -webkit-border-radius: 100px;
+      border-radius: 100px;
+      position: absolute;
+      left: 7px;
+      top: 7px;
+    }
+
+    .step-bar__step-text-container {
+      padding: 22px 0 0;
+
+      .main-topic {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-weight: normal;
+        height: 40px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .active .step-bar__step-indicator,
+  .completed .step-bar__step-indicator {
+    background-color: $primary-color;
+    color: $white;
+  }
+
+  .completed .step-bar__step-indicator:before {
+    background-color: $primary-color;
+    background-image: url(../images/chosen-sprite.png);
+    background-position: 46px -17px;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+  }
+
+  .warning .step-bar__step-indicator {
+    background-color: #f79d21;
+  }
+
+  .warning .step-bar__step-indicator:before {
+    background-color: #f79d21;
+    background-image: url(../images/exclamation-icon-small.png);
+    background-position: 21px -1px;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+  }
+
+  .danger .step-bar__step-indicator {
+    background-color: #eb4d4b;
+  }
+
+  .danger .step-bar__step-indicator:before {
+    background-color: #eb4d4b;
+    background-image: url(../images/exclamation-icon-small.png);
+    background-position: -2px -1px;
+    width: 18px;
+    height: 18px;
+    left: 3px;
+    top: 3px;
+  }
+
+  .step-bar__container:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    background-color: $gray-200;
+    height: 2px;
+  }
+
+  .active.step-bar__container:before,
+  .completed.step-bar__container:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    background-color: $primary-color;
+    height: 2px;
+  }
+
+  .step-bar__container:after,
+  .active.step-bar__container:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    background-color: $gray-200;
+    height: 2px;
+  }
+
+  .completed.step-bar__container:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    background-color: $primary-color;
+    height: 2px;
+  }
+
+  .step-bar__container:first-child:before,
+  .step-bar__container:last-child:after {
+    background-color: transparent;
+  }
+}

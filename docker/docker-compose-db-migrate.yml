@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  portal_db_migration:
+    image: boxfuse/flyway:5.2.4
+    volumes:
+      - ${MYSQL_UPDATE_SCRIPTS_DATA_VOLUME}:/flyway/sql
+    networks:
+      - rnmmesh
+    command: -connectRetries=20 -schemas=release_note_db -baselineOnMigrate=true -baselineVersion=1 -url=${PORTAL_MYSQL_DB_CONNECTION_URL} -user=${PORTAL_MYSQL_DB_USER} -password=${PORTAL_MYSQL_DB_PWD} migrate
+
+#-validateOnMigrate=false
+networks:
+  rnmmesh: {}

@@ -1,0 +1,55 @@
+server:
+  port: 10001
+  forward-headers-strategy: framework
+
+spring:
+  datasource:
+    url: ${PORTAL_MYSQL_DB_CONNECTION_URL:jdbc:mysql://127.0.0.1:33080/release_note_db?useSSL=false&autoReconnect=true&useUnicode=true&character_set_server=utf8m&allowPublicKeyRetrieval=true}
+    username: ${PORTAL_MYSQL_DB_USER:user}
+    password: ${PORTAL_MYSQL_DB_PWD:password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 50
+      connection-timeout: 2000
+#  security:
+#    user:
+#      name: user
+#      password: password
+#      roles: user
+
+springdoc:
+  swagger-ui:
+    path: /api-docs.html
+    show-extensions: true
+    show-common-extensions: true
+  api-docs:
+    path: /api-docs.json
+    groups:
+      enabled: true
+
+#keycloak:
+#  realm: release-note-manager
+#  auth-server-url: http://localhost:9090/auth
+#  ssl-required: external
+#  resource: release-note-manager
+#  credentials:
+#    secret: 0b59b6b6-e9c0-43c5-9346-f86545ebad10
+#  use-resource-role-mappings: true
+#  bearer-only: true
+
+rnm:
+  endpoints:
+    web:
+      cors:
+        allowed-origins:
+          - "*"
+        allowed-headers:
+          - "*"
+        allowed-methods:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - OPTIONS
+

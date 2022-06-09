@@ -1,0 +1,7 @@
+FROM jboss/keycloak:10.0.1
+
+# Expose keycloak 8080 port
+EXPOSE 8080
+
+# Start Keycloak with realm import enabled
+CMD ["-b", "0.0.0.0", "-Dkeycloak.profile.feature.upload_scripts=enabled"]

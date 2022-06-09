@@ -1,0 +1,11 @@
+# The Base Image used to create this Image
+FROM httpd:2.4.41
+
+RUN mkdir -p /hms/logs/apache
+
+# To tell docker to expose this port
+EXPOSE 443
+
+# The Base command, This command should be used to start the container
+# Remember, A Container is a Process.As long as the base process (started by base cmd) is live the Container will be ALIVE.
+CMD ["httpd", "-D", "FOREGROUND"]

@@ -1,0 +1,210 @@
+.btn {
+  font-size: 0.8125rem;
+  padding: .8rem .8rem;
+  font-weight: bold;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem !important;
+}
+
+.btn-icon {
+  display: inline-block;
+  width: 2.7rem;
+  height: 2.7rem;
+  padding: .8rem 1rem;
+  background-color: rgba(255,255,255,.1);
+  color: $white;
+  @include border-radius(50rem);
+  text-align: center;
+  cursor: pointer;
+
+  i {
+    width: .7rem;
+  }
+}
+
+.btn-icon_sm {
+  width: 2rem;
+  height: 2rem;
+  padding: .5rem .6rem;
+}
+
+.btn-icon:hover {
+  color: $primary-color !important;
+}
+
+/*Toggle Button*/
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 15px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $gray-400;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 1px;
+  bottom: 1px;
+  background: $white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: $secondary-color;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px $secondary-color;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(15px);
+  -ms-transform: translateX(15px);
+  transform: translateX(15px);
+}
+
+.slider.round {
+  @include border-radius(34px);
+}
+
+.slider.round:before {
+  @include border-radius(50%);
+}
+
+//Checkbox button
+/* The container */
+.check-container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  padding-top: 4px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 13px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.check-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark,
+.checkmark-radio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  @include border-radius(3px);
+}
+
+.check-container__table {
+  .checkmark {
+    top: -5px;
+  }
+}
+
+.checkmark-radio {
+  @include border-radius(100px);
+}
+
+/* On mouse-over, add a grey background color */
+.check-container:hover input ~ .checkmark,
+.check-container:hover input ~ .checkmark-radio {
+  background-color: #ccc;
+}
+
+.check-container:hover input ~ .checkmark-radio {
+  @include border-radius(100px);
+}
+
+/* When the checkbox is checked, add a blue background */
+.check-container input:checked ~ .checkmark,
+.check-container input:checked ~ .checkmark-radio {
+  background-color: $secondary-color;
+}
+
+.check-container input:disabled ~ .checkmark,
+.check-container input:disabled ~ .checkmark-radio {
+  background-color: $gray-200;
+}
+
+.check-container input:checked ~ .checkmark-radio {
+  @include border-radius(100px);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after,
+.checkmark-radio:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.check-container input:checked ~ .checkmark:after,
+.check-container input:checked ~ .checkmark-radio:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.check-container .checkmark:after {
+  left: 10px;
+  top: 7px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.check-container .checkmark-radio:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+body.dark-theme {
+  .checkmark,
+  .checkmark-radio {
+    background-color: $gray-800;
+  }
+}

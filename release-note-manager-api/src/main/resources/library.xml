@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<configuration xmlns="http://www.jooq.org/xsd/jooq-codegen-3.11.0.xsd">
+
+    <jdbc>
+        <driver>com.mysql.cj.jdbc.Driver</driver>
+        <!--
+        This should come from maven run time config.
+         Use -Djooq.JDBC_URL="jdbc:mysql://127.0.0.1:33080/release_note_db?useSSL=false&allowPublicKeyRetrieval=true"
+        -->
+        <url>${jooq.JDBC_URL}</url>
+        <user>user</user>
+        <password>password</password>
+    </jdbc>
+
+    <generator>
+        <name>org.jooq.codegen.JavaGenerator</name>
+
+        <database>
+            <name>org.jooq.meta.mysql.MySQLDatabase</name>
+            <inputSchema>release_note_db</inputSchema>
+            <outputSchemaToDefault>true</outputSchemaToDefault>
+            <includes>.*</includes>
+            <excludes></excludes>
+        </database>
+
+        <target>
+            <packageName>hms.commons.rnm.db.schema</packageName>
+            <directory>src/main/java</directory>
+        </target>
+    </generator>
+</configuration>

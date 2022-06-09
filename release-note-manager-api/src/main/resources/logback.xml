@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ (C) Copyright 2006-2020 hSenid Mobile Solutions (Pvt) Limited.
+  ~
+  ~ All Rights Reserved.
+  ~
+  ~ These materials are unpublished, proprietary, confidential source code of
+  ~ hSenid Mobile Solutions (Pvt) Limited and constitute a TRADE SECRET
+  ~ of hSenid Mobile Solutions (Pvt) Limited.
+  ~
+  ~ hSenid Mobile Solutions (Pvt) Limited retains all title to and intellectual
+  ~ property rights in these materials.
+  ~
+  -->
+
+<configuration>
+    <property name="LOG_PATH" value="/hms/logs/rnm"/>
+
+    <!-- These parameters can be configured as enviromental variables in docker -->
+    <variable name="FRAMEWORK_LOG_LEVEL" value="${FRAMEWORK_LOG_LEVEL:-ERROR}" />
+    <variable name="GRAPHQL_LOG_LEVEL" value="${GRAPHQL_LOG_LEVEL:-ERROR}" />
+    <variable name="HIKARY_LOG_LEVEL" value="${HIKARY_LOG_LEVEL:-ERROR}" />
+
+    <variable name="JOOQ_LOG_LEVEL" value="${JOOQ_LOG_LEVEL:-INFO}" />
+    <variable name="HMS_LOG_LEVEL" value="${HMS_LOG_LEVEL:-DEBUG}" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <pattern>%date{yyyy:MM:dd HH:mm:ss:SSS} %-5level [%thread] [${PID:-}] %logger{1} T[%X{X-B3-TraceId:-}] S[%X{X-B3-SpanId:-}] PS[%X{B3-ParentSpanId:-}] - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="debug-appender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/rnm-debug.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/rnm-debug.%d{yyyy-MM-dd_HH}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy:MM:dd HH:mm:ss:SSS} %-5level [%thread] [${PID:-}] %logger{1} T[%X{X-B3-TraceId:-}] S[%X{X-B3-SpanId:-}] PS[%X{B3-ParentSpanId:-}] C[%X{correlationId:-}] - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="error-appender"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/rnm-error.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/rnm-error.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%date{yyyy:MM:dd HH:mm:ss:SSS} %-5level [%thread] [${PID:-}] %logger{1} T[%X{X-B3-TraceId:-}] S[%X{X-B3-SpanId:-}] PS[%X{B3-ParentSpanId:-}] C[%X{correlationId:-}] - %msg %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="audit-log-appender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/rnm-audit.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/rnm-audit.%d{yyyy-MM-dd_HH}.log.gz</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{YYYY:MM:dd HH:mm:ss SSS}|%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org" level="${FRAMEWORK_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="org.springframework" level="${FRAMEWORK_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="com.expedia.graphql" level="${GRAPHQL_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="graphql" level="${GRAPHQL_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="com.zaxxer.hikari" level="${HIKARY_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="org.jooq" level="${JOOQ_LOG_LEVEL}">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="hms" level="${HMS_LOG_LEVEL}" additivity="true">
+        <appender-ref ref="debug-appender"/>
+    </logger>
+
+    <logger name="AUDIT_LOG" level="INFO" additivity="false">
+        <appender-ref ref="audit-log-appender"/>
+    </logger>
+
+    <root level="ERROR">
+        <appender-ref ref="error-appender"/>
+    </root>
+</configuration>

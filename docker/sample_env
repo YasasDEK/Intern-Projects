@@ -1,0 +1,114 @@
+## ====================================================== ##
+## This is a sample .env file you need to have in your
+## docker setup. Take a copy of this file
+## and rename it as .env
+## ====================================================== ##
+
+## System Timezone
+SERVER_TIME_ZONE=Asia/Colombo
+
+
+#This is where the mysql db data will be stored
+MYSQL_DATA_VOLUME=/hms/data/rnm/mysql
+
+## =========================================== ##
+## Mysql Docker configs for DB Migration
+## =========================================== ##
+#
+MYSQL_UPDATE_SCRIPTS_DATA_VOLUME=../db-scripts
+# This is used for the Flyway DB migration
+PORTAL_MYSQL_DB_CONNECTION_URL=jdbc:mysql://rnm-mysql:3306/release_note_db?useSSL=false&autoReconnect=true&useUnicode=true&character_set_server=utf8m&allowPublicKeyRetrieval=true
+PORTAL_MYSQL_DB_USER=user
+PORTAL_MYSQL_DB_PWD=password
+
+## =========================================== ##
+## Keycloak Configs
+## =========================================== ##
+#
+PORTAL_KEYCLOAK_REALM_FILE_PATH=../keycloak/realm-export.json
+PORTAL_KEYCLOAK_HOST=rnm-keycloak:8080
+# Keycloak client id and secret
+PORTAL_KEYCLOAK_CLIENT_ID=122052570577-9g9g4rt11q8v99t0ijl08rq84bhg2b45.apps.googleusercontent.com
+PORTAL_KEYCLOAK_CLIENT_SECRET=  pNhO0nvrjrvrjZQBzIIrXLdC
+#PORTAL_KEYCLOAK_LOGIN_THEME_FILE_PATH=../keycloak/hviewLoginTheme
+
+## =========================================== ##
+## Apache Server configurations
+## =========================================== ##
+#
+APACHE_HTTPD_CONF_VOLUME=../apache/httpd.conf
+APACHE_MPM_CONF_VOLUME=../apache/httpd-mpm.conf
+APACHE_SSL_CONF_VOLUME=../apache/httpd-ssl.conf
+APACHE_LOG_VOLUME=/hms/logs/rnm-docker/apache
+APACHE_CERT_LOCATION=../apache/hms.crt
+APACHE_CERT_KEY_LOCATION=../apache/hms.key
+APACHE_INTERMEDIATE_CERT_LOCATION=../apache/ca.crt
+
+## =========================================== ##
+## Nginx configs
+## =========================================== ##
+#
+RNF_NGINX_CONF=../nginx/rnm_nginx.conf
+RNF_FILE_UPLOAD_VOLUME=/hms/files
+RNF_NGINX_LOG_VOLUME=/hms/logs/nginx/
+
+
+## =========================================== ##
+## RNM Web Config
+## =========================================== ##
+#
+RNM_WEBAPP_LOG=/hms/logs/rnm/rnm-nginx
+
+## =========================================== ##
+## RNM API Config
+## =========================================== ##
+#
+RNM_API_SERVER_LOG=/hms/logs/rnm/docker/release-note-manager
+
+PORTAL_API_NAME=rnm-release-note-manager-api
+PORTAL_API_PORT=10001
+PORTAL_API_NODE_ID=10
+
+PORTAL_FILE_UPLOAD_TEMP_LOCATION=/hms/files/file-uploads
+PORTAL_FILE_UPLOAD_APP_RELATED_LOCATION=/hms/files/file-uploads/apps
+PORTAL_FILE_APP_CONTENT_RELATED_LOCATION=/hms/files/file-uploads/apps/app-content
+PORTAL_FILE_UPLOAD_MAX_SIZE_IN_MB=15
+SNMP_SCRIPT_PATH=/hms/scripts/snmp_send.sh
+
+RNM_RELEASE_NOTE_MANAGER_DB_CONNECTION_SUCCESS=connection to Release-Note-Manager-DB success
+RNM_RELEASE_NOTE_MANAGER_DB_CONNECTION_FAILED=connection to Release-Note-Manager-DB failure
+RNM_RELEASE_NOTE_MANAGER_DB_CONNECTION_TRAP_DELAY=1
+RNM_RELEASE_NOTE_MANAGER_DB_CONNECTION_TRAP_KEY=api-to-release_note_manager_db
+
+VALIDATION_APP_NAME_REGEX=^[a-zA-Z0-9_-]{5,50}$
+VALIDATION_APP_DETAILS_REGEX=^[\s\S]{1,250}$
+VALIDATION_IMG_FILE_SIZE=50000
+VALIDATION_BANNER_FILE_SIZE=600000
+VALIDATION_TOC_TEXT_REGEX=^[\s\S]{1,500}$
+VALIDATION_TOC_FILE_SIZE=600000
+VALIDATION_MSISDN_REGEX=^947[0-9]{8}$
+
+CONTENT_REACTION_API_BASE_PATH=http://127.0.0.1:10002/reaction-manager
+CONTENT_REACTION_APP_PATH=/summary/apps
+CONTENT_REACTION_APP_CONTENT_SERVICE=/summary/contents
+RELEASE_NOTE_MANAGER_APP_CONTENT_REACTION_SERVICE_PATH=/details/reactions/content/{contentId}
+RELEASE_NOTE_MANAGER_APP_CONTENT_COMMENTS_SERVICE_PATH=/details/comments/content/{contentId}
+CONTENT_REACTION_CONNECTION_SUCCESS=connection to sla-info success
+CONTENT_REACTION_CONNECTION_FAILED=connection to sla-info failure
+CONTENT_REACTION_CONNECTION_TRAP_DELAY=1
+CONTENT_REACTION_CONNECTION_TRAP_KEY=tap_mt_handler-to-sla_info
+CONTENT_REACTION_REQ_TIMEOUT=5000
+CONTENT_REACTION_CONNECTION_TIMEOUT=5000
+
+SUBS_MANAGE_BASE_PATH=http://127.0.0.1:10002/reaction-manager
+SUBS_MANAGE_SUBSCRIBERS_SERVICE_PATH=/summary/apps
+SUBS_MANAGE_SUBSCRIBER_COUNT_SERVICE_PATH=/details/reactions/content/{contentId}
+SUBS_MANAGE_DELETE_SUBSRIBER_SERVICE_PATH=/details/comments/content/{contentId}
+SUBS_MANAGE_CONNECTION_SUCCESS=connection to exchange success
+SUBS_MANAGE_CONNECTION_FAILED=connection to exchange failure
+SUBS_MANAGE_CONNECTION_TRAP_DELAY=1
+SUBS_MANAGE_CONNECTION_TRAP_KEY=portal_api-to-subs_manager
+SUBS_MANAGE_REQ_TIMEOUT=5000
+SUBS_MANAGE_CONNECTION_TIMEOUT=5000
+
+DOCKERHOST=172.17.0.1
